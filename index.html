@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I'm Sorry My Love</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translateX(-1px); }
+            20%, 80% { transform: translateX(2px); }
+            30%, 50%, 70% { transform: translateX(-4px); }
+            40%, 60% { transform: translateX(4px); }
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden p-8 text-center">
+        <!-- Sticker -->
+        <div class="heartbeat mb-6">
+            <i class="fas fa-heart text-red-500 text-8xl"></i>
+        </div>
+        
+        <!-- Apology Message -->
+        <h1 class="text-3xl font-bold text-pink-600 mb-2">... xin lỗi mà</h1>
+        <p class="text-gray-600 mb-6 apology-line">... hứa không đi trể nữa!</p>
+        
+        <!-- Buttons -->
+        <div class="flex justify-center space-x-4 mt-8 transition-all duration-500" id="buttonContainer">
+            <button id="forgiveBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+                Tha lỗi
+            </button>
+            <button id="dontForgiveBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105">
+                Dỗi
+            </button>
+        </div>
+    </div>
+
+    <!-- Hidden Success Message -->
+    <div id="successMessage" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-8 rounded-xl max-w-sm text-center animate__animated animate__bounceIn">
+            <i class="fas fa-heart text-red-500 text-6xl mb-4"></i>
+            <h2 class="text-2xl font-bold text-pink-600 mb-2">Yêu yêu</h2>
+            <p class="text-gray-600 mb-4">Cảm ơn người đẹp tha lỗi nhó!</p>
+        </div>
+    </div>
+
+    <script>
+        const forgiveBtn = document.getElementById('forgiveBtn');
+        const dontForgiveBtn = document.getElementById('dontForgiveBtn');
+        const buttonContainer = document.getElementById('buttonContainer');
+        const successMessage = document.getElementById('successMessage');
+        const apologyLine = document.querySelector('.apology-line');
+        
+        let forgiveSize = 1;
+        let dontForgiveSize = 1;
+        let pleaCounter = 0;
+        const pleas = [
+            "Tha lỗi đi!",
+            "Đi mà!",
+            "Tha lỗi đi! ",
+            "... sẽ không làm như vậy nữa!",
+            "... sẽ làm mọi thứ để bù đắp",
+            "... sẽ không bao giwof làm như vậy nữa!",
+            "... sẽ không bao giờ làm Thy buồn nữa đâu !",
+            "Tha lỗi cho ... đi mà"
+        ];
+        
+        dontForgiveBtn.addEventListener('click', function() {
+            // Change the pleading message
+            pleaCounter = (pleaCounter + 1) % pleas.length;
+            apologyLine.textContent = pleas[pleaCounter];
+            
+            // Make forgive button bigger
+            forgiveSize += 0.2;
+            dontForgiveSize = Math.max(0.5, dontForgiveSize - 0.1);
+            
+            forgiveBtn.style.transform = `scale(${forgiveSize})`;
+            dontForgiveBtn.style.transform = `scale(${dontForgiveSize})`;
+            
+            // Add shake effect to the container
+            buttonContainer.classList.add('shake');
+            setTimeout(() => {
+                buttonContainer.classList.remove('shake');
+            }, 500);
+            
+            // If "Don't Forgive" button gets too small, reset sizes
+            if (dontForgiveSize <= 0.5) {
+                setTimeout(() => {
+                    forgiveSize = 1;
+                    dontForgiveSize = 1;
+                    forgiveBtn.style.transform = 'scale(1)';
+                    dontForgiveBtn.style.transform = 'scale(1)';
+                }, 1000);
+            }
+        });
+        
+        forgiveBtn.addEventListener('click', function() {
+            // Show success message
+            successMessage.classList.remove('hidden');
+            
+            // Hide buttons
+            buttonContainer.classList.add('hidden');
+        });
+    </script>
+</body>
+
+</html>
